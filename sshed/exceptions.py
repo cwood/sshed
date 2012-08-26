@@ -1,0 +1,2 @@
+class NotAServer(Exception):
+    pass
