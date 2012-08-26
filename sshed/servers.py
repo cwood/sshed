@@ -59,7 +59,7 @@ class Server(object):
 
         return client
 
-    def commands(self, string):
+    def commands(self, string, echo=False):
         """
             Use triple quoted strings to send in a mass of shell commands.
             This comes in handy if you need to run a small bash script but
@@ -70,7 +70,9 @@ class Server(object):
             raise Exception("Either one command or not triple quoated")
 
         for command in string.splitlines():
-            self.run(command)
+            output = self.run(command)
+            if echo:
+                print output
 
     def run(self, command, pty=True):
         """
@@ -131,6 +133,12 @@ def from_conf(server, config_file=path.expanduser('~/.ssh/config')):
         This will create a new server based of a users config file. It should
         set up various things like forward agent, default usernames, and
         default settings for a server.
+
+        .. code-example:: python
+            from sshed import servers
+            server = servers.from_conf('development')
+            server.run("whoami")
+            >> ["myusername"]
     """
     ssh_config = paramiko.SSHConfig()
 
