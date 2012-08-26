@@ -127,6 +127,11 @@ class Server(object):
 
 
 def from_conf(server, config_file=path.expanduser('~/.ssh/config')):
+    """
+        This will create a new server based of a users config file. It should
+        set up various things like forward agent, default usernames, and
+        default settings for a server.
+    """
     ssh_config = paramiko.SSHConfig()
 
     with open(config_file) as ssh_conf:
