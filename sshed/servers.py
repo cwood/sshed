@@ -119,6 +119,16 @@ class Server(object):
 
         return output
 
+    def file_exists(self, remote_path):
+        sftp = self.client.open_sftp()
+
+        try:
+            data = sftp.stat(remote_path)
+        except IOError:
+            return False
+
+        return data
+
     def upload(self, local_file, remote_path):
         sftp = self.client.open_sftp()
         sftp.put(local_file, remote_path)
