@@ -10,7 +10,8 @@ to do other tasks. Also the API is dead simple.
 
 Examples
 -------------------
-Creating a server from your ~/.ssh/config with ssh keys created.
+Creating a server from your ~/.ssh/config with ssh keys created. This also
+uses a host alias.
 
 ```python
 from sshed import servers
@@ -25,6 +26,14 @@ server.run('pwd').output
 >> ['/var/www']
 ```
 
+Creating a server from just a hostname
+```python
+from sshed import servers
+server = servers.from_conf('myserver.com')
+server.run('hostname').output
+>> ['myserver.com']
+```
+
 Creating a new server without a ssh config
 ```python
 from sshed.servers import Server
@@ -33,3 +42,5 @@ server = Server(username='username', hostname='development.mycompany.com',
 
 server.run( ... )
 ```
+
+
