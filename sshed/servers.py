@@ -1,4 +1,5 @@
 import paramiko
+from .commands import Command
 from getpass import getpass, getuser
 from os import path
 
@@ -74,7 +75,7 @@ class Server(object):
             if echo:
                 print output
 
-    def run(self, command, pty=True):
+    def run(self, command, pty=True, echo=False):
         """
             run should not treat sudo commands any different then normal
             user commands.
@@ -82,6 +83,8 @@ class Server(object):
             Need to exapnd this for failed sudo passwords and refreshing
             the channel.
         """
+
+        cmd_obj = Command(command, self)
 
         cd = False
 
@@ -113,11 +116,18 @@ class Server(object):
                 received = channel.recv(1024).splitlines()
                 output.append(*received)
 
+                if echo:
+                    for line in received:
+                        print line
+
                 has_sudo = [line for line in received if 'sudo' in line]
                 if has_sudo:
                     channel.sendall(self.password + '\n')
 
-        return output
+        cmd_obj.output = output
+        cmd_obj.returncode = channel.recv_exit_status()
+
+        return cmd_obj
 
     def path_exists(self, remote_path):
         sftp = self.client.open_sftp()
