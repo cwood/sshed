@@ -14,11 +14,12 @@ Examples
 ```python
     from sshed import servers
     server = servers.from_conf('development')
-    server.run('whoami')
+    server.run('whoami').output
     >> ['cwood']
-    server.run('sudo whoami')
+    server.run('sudo whoami').output
     >> ['root']
-    server.run('cd /var/www')
-    server.run('pwd')
+    server.run('cd /var/www').returncode
+    >> 0
+    server.run('pwd').output
     >> ['/var/www']
 ```
