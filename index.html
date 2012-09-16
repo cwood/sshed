@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Sshed by cwood</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Sshed</h1>
+        <p class="header">Minimal SSH wrapper around paramiko</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/cwood/sshed/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/cwood/sshed/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/cwood/sshed">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/cwood">cwood</a></p>
+
+
+      </header>
+      <section>
+        <h1>sshed</h1>
+
+<p>sshed is a minimal paramiko wrapper that makes working with ssh through python
+just like working with it in normal SSH. It will use your configuration that
+you have already created first then any extra options can be passed in through
+the library that is using it. Servers are base objects that can be extended
+to do other tasks. Also the API is dead simple.</p>
+
+<h2>Examples</h2>
+
+<p>Creating a server from your ~/.ssh/config with ssh keys created. This also
+uses a host alias.</p>
+
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">sshed</span> <span class="kn">import</span> <span class="n">servers</span>
+<span class="n">server</span> <span class="o">=</span> <span class="n">servers</span><span class="o">.</span><span class="n">from_conf</span><span class="p">(</span><span class="s">'development'</span><span class="p">)</span>
+<span class="n">server</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">'whoami'</span><span class="p">)</span><span class="o">.</span><span class="n">output</span>
+<span class="o">&gt;&gt;</span> <span class="p">[</span><span class="s">'cwood'</span><span class="p">]</span>
+<span class="n">server</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">'sudo whoami'</span><span class="p">)</span><span class="o">.</span><span class="n">output</span>
+<span class="o">&gt;&gt;</span> <span class="p">[</span><span class="s">'root'</span><span class="p">]</span>
+<span class="n">server</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">'cd /var/www'</span><span class="p">)</span><span class="o">.</span><span class="n">returncode</span>
+<span class="o">&gt;&gt;</span> <span class="mi">0</span>
+<span class="n">server</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">'pwd'</span><span class="p">)</span><span class="o">.</span><span class="n">output</span>
+<span class="o">&gt;&gt;</span> <span class="p">[</span><span class="s">'/var/www'</span><span class="p">]</span>
+</pre></div>
+
+<p>Creating a server from just a hostname</p>
+
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">sshed</span> <span class="kn">import</span> <span class="n">servers</span>
+<span class="n">server</span> <span class="o">=</span> <span class="n">servers</span><span class="o">.</span><span class="n">from_conf</span><span class="p">(</span><span class="s">'myserver.com'</span><span class="p">)</span>
+<span class="n">server</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">'hostname'</span><span class="p">)</span><span class="o">.</span><span class="n">output</span>
+<span class="o">&gt;&gt;</span> <span class="p">[</span><span class="s">'myserver.com'</span><span class="p">]</span>
+</pre></div>
+
+<p>Creating a new server without a ssh config</p>
+
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">sshed.servers</span> <span class="kn">import</span> <span class="n">Server</span>
+<span class="n">server</span> <span class="o">=</span> <span class="n">Server</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">'username'</span><span class="p">,</span> <span class="n">hostname</span><span class="o">=</span><span class="s">'development.mycompany.com'</span><span class="p">,</span>
+        <span class="n">password</span><span class="o">=</span><span class="s">'supersecretpassword'</span><span class="p">)</span>
+
+<span class="n">server</span><span class="o">.</span><span class="n">run</span><span class="p">(</span> <span class="o">...</span> <span class="p">)</span>
+</pre></div>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
