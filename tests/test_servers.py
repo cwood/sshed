@@ -1,6 +1,9 @@
 import unittest
 from sshed import servers
-from .local_ssh import user, password, host
+
+user = 'vagrant'
+password = 'vagrant'
+host = '2.3.4.5'
 
 
 class TestServer(unittest.TestCase):
@@ -9,26 +12,27 @@ class TestServer(unittest.TestCase):
         self.server = servers.Server(host, user=user, password=password)
 
     def test_run(self):
-        self.assertEqual(self.server.run('whoami'), [user])
+        self.assertEqual(self.server.run('whoami').output, [user])
 
     def test_sudo(self):
-        self.assertEqual(self.server.run('sudo whoami'), ['root'])
+        self.assertEqual(self.server.run('sudo whoami').output, ['root'])
 
     def test_path(self):
+        self.server.run('mkdir ~/dotfiles')
         self.server.run('cd ~/dotfiles')
-        self.assertEqual(self.server.run('pwd'),
+        self.assertEqual(self.server.run('pwd').output,
                          ['/home/' + user + '/dotfiles'])
-        self.server.run('cd .vim')
-        self.assertEqual(self.server.run('pwd'),
-                         ['/home/' + user + '/dotfiles/.vim'])
 
 
 class TestServerFromConf(unittest.TestCase):
 
+    def setUp(self):
+        self.ssh_config = 'tests/sshconfig'
+
     def test_creation(self):
-        server = servers.from_conf('development')
+        server = servers.from_conf('development', config_file=self.ssh_config)
         self.assertTrue(isinstance(server, servers.Server))
 
     def test_extra_attribute(self):
-        server = servers.from_conf('development')
+        server = servers.from_conf('development', config_file=self.ssh_config)
         self.assertTrue(hasattr(server, 'forwardagent'))
