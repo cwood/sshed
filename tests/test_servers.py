@@ -12,10 +12,10 @@ class TestServer(unittest.TestCase):
         self.server = servers.Server(host, user=user, password=password)
 
     def test_run(self):
-        self.assertEqual(self.server.run('whoami').output, [user])
+        self.assertTrue(user in self.server.run('whoami').output)
 
     def test_sudo(self):
-        self.assertEqual(self.server.run('sudo whoami').output, ['root'])
+        self.assertTrue('root' in self.server.run('sudo whoami').output)
 
     def test_path(self):
         self.server.run('mkdir ~/dotfiles')
