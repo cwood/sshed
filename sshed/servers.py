@@ -39,10 +39,6 @@ class Server(object):
 
         self.cwd = '~'
 
-        self.client = self._setup_client()
-
-    def _setup_client(self):
-
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy)
         client.load_system_host_keys()
@@ -51,14 +47,16 @@ class Server(object):
             client.connect(self.hostname, username=self.username)
         except paramiko.SSHException:
             try:
-                client.connect(self.hostname,
-                              username=self.username,
-                              password=getpass())
+                client.connect(self.hostname, username=self.username,
+                               password=self.password
+                               if self.password else getpass(),
+                              port=22
+                               if not kwargs.get('port') else kwargs.get('22'))
+
+                self.client = client
 
             except:
                 raise Exception("User password is wrong or can not access")
-
-        return client
 
     def commands(self, string, echo=False):
         """
@@ -124,7 +122,7 @@ class Server(object):
                 if has_sudo:
                     channel.sendall(self.password + '\n')
 
-        cmd_obj.output = output
+        cmd_obj.output = [line for line in output if line]
         cmd_obj.returncode = channel.recv_exit_status()
 
         return cmd_obj
