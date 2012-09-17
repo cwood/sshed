@@ -6,7 +6,7 @@ setup(
     author='Colin Wood',
     author_email='cwood06@gmail.com',
     install_requires=[
-        'paramiko>=1.7.7.2',
+        'ssh>=1.7.14',
     ],
     long_description=open('README.markdown').read(),
     url='http://cwood.github.com/sshed/',
