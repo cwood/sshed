@@ -43,4 +43,16 @@ server = Server(username='username', hostname='development.mycompany.com',
 server.run( ... )
 ```
 
+Working with argparse. This sshed module also has a helper for working
+with argparse. You can import an action so that when a user puts in a
+``--server server.mycompany.com`` it will create a new server instance
+for that server.
 
+Example:
+
+```python
+from sshed.argparse_actions import ServerAction
+
+# some other argparse information
+parser.add_argument('-s', '--server', action=ServerAction, dest='server')
+```
