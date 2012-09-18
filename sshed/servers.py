@@ -1,10 +1,11 @@
-import paramiko
+import ssh
 from .commands import Command
 from getpass import getpass, getuser
 from os import path
 
 
 class Server(object):
+
     """
         Server is a base class to call ssh commands on. It should used
         like this. The server object should be the base of all environment
@@ -33,30 +34,26 @@ class Server(object):
         if not self.username:
             self.username = getuser()
 
-        if kwargs:
-            for key, value in kwargs.iteritems():
-                setattr(self, key, value)
-
+        self.config = kwargs
         self.cwd = '~'
-
-        client = paramiko.SSHClient()
-        client.set_missing_host_key_policy(paramiko.AutoAddPolicy)
+        client = ssh.SSHClient()
+        client.set_missing_host_key_policy(ssh.AutoAddPolicy())
         client.load_system_host_keys()
 
         try:
             client.connect(self.hostname, username=self.username)
-        except paramiko.SSHException:
+        except ssh.SSHException:
             try:
                 client.connect(self.hostname, username=self.username,
                                password=self.password
                                if self.password else getpass(),
                               port=22
-                               if not kwargs.get('port') else kwargs.get('22'))
-
-                self.client = client
-
+                               if not kwargs.get('port') else kwargs.get(
+                                   'port'))
             except:
                 raise Exception("User password is wrong or can not access")
+
+        self.client = client
 
     def commands(self, string, echo=False):
         """
@@ -98,6 +95,9 @@ class Server(object):
             else:
                 self.cwd = path
 
+        if self.config.get('forwardagent', False):
+            agent = ssh.agent.Agent()
+
         channel = self.client.get_transport().open_session()
 
         if pty:
@@ -112,7 +112,7 @@ class Server(object):
         while not channel.exit_status_ready():
             if channel.recv_ready():
                 received = channel.recv(1024).splitlines()
-                output.append(*received)
+                output.extend(received)
 
                 if echo:
                     for line in received:
@@ -122,8 +122,22 @@ class Server(object):
                 if has_sudo:
                     channel.sendall(self.password + '\n')
 
+                has_passphrase = [line for line in received
+                                  if 'passphrase' in line]
+
+                if has_passphrase:
+                    if self.password is None:
+                        channel.sendall(getpass(has_passphrase[0])
+                                        + '\n')
+                    else:
+                        channel.sendall(self.password + '\n')
+
+
         cmd_obj.output = [line for line in output if line]
         cmd_obj.returncode = channel.recv_exit_status()
+
+        if self.config.get('forwardagent', False):
+            agent.close()
 
         return cmd_obj
 
@@ -157,7 +171,7 @@ def from_conf(server, config_file=path.expanduser('~/.ssh/config')):
             server.run("whoami")
             >> ["myusername"]
     """
-    ssh_config = paramiko.SSHConfig()
+    ssh_config = ssh.SSHConfig()
 
     with open(config_file) as ssh_conf:
         ssh_config.parse(ssh_conf)
