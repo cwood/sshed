@@ -10,9 +10,8 @@ to do other tasks. Also the API is dead simple.
 
 Documentation / Repo Information:
 ---------------------------------
-
-Repo: https://github.com/cwood/sshed
-Documentation: http://sshed.readthedocs.org/en/latest/index.html
+* Documentation: http://sshed.readthedocs.org/en/latest/index.html
+* Repo: https://github.com/cwood/sshed
 
 
 Examples
