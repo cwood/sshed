@@ -142,6 +142,9 @@ class Server(object):
         return cmd_obj
 
     def path_exists(self, remote_path):
+        """
+            Check to see if a path exsits on the remote server
+        """
         sftp = self.client.open_sftp()
         try:
             sftp.chdir(remote_path)
@@ -151,10 +154,16 @@ class Server(object):
         return True
 
     def upload(self, local_file, remote_path):
+        """
+            Upload a file to the remote server
+        """
         sftp = self.client.open_sftp()
         sftp.put(local_file, remote_path)
 
     def download(self, remote_path, local_file):
+        """
+            Download a file from the remote server
+        """
         sftp = self.client.open_sftp()
         sftp.get(remote_path, local_file)
 
@@ -165,7 +174,8 @@ def from_conf(server, config_file=path.expanduser('~/.ssh/config')):
         set up various things like forward agent, default usernames, and
         default settings for a server.
 
-        .. code-example:: python
+        .. code-block:: python
+
             from sshed import servers
             server = servers.from_conf('development')
             server.run("whoami")
