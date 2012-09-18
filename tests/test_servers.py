@@ -32,7 +32,3 @@ class TestServerFromConf(unittest.TestCase):
     def test_creation(self):
         server = servers.from_conf('development', config_file=self.ssh_config)
         self.assertTrue(isinstance(server, servers.Server))
-
-    def test_extra_attribute(self):
-        server = servers.from_conf('development', config_file=self.ssh_config)
-        self.assertTrue(hasattr(server, 'forwardagent'))
