@@ -8,6 +8,13 @@ the library that is using it. Servers are base objects that can be extended
 to do other tasks. Also the API is dead simple.
 
 
+Documentation / Repo Information:
+---------------------------------
+
+Repo: https://github.com/cwood/sshed
+Documentation: http://sshed.readthedocs.org/en/latest/index.html
+
+
 Examples
 -------------------
 Creating a server from your ~/.ssh/config with ssh keys created. This also
