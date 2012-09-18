@@ -12,5 +12,5 @@ setup(
     url='http://cwood.github.com/sshed/',
     version=version,
     packages=['sshed'],
-    description='Minimal Parmaiko wrapper to make working with SSH easy.',
+    description='Minimal Parmaiko/ssh2 wrapper to make working with SSH easy.',
 )
