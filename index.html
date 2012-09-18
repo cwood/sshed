@@ -32,7 +32,7 @@
       <section>
         <h1>sshed</h1>
 
-<p>sshed is a minimal paramiko wrapper that makes working with ssh through python
+<p>sshed is a minimal paramiko/ssh2 wrapper that makes working with ssh through python
 just like working with it in normal SSH. It will use your configuration that
 you have already created first then any extra options can be passed in through
 the library that is using it. Servers are base objects that can be extended
@@ -63,6 +63,14 @@ uses a host alias.</p>
 <span class="o">&gt;&gt;</span> <span class="p">[</span><span class="s">'myserver.com'</span><span class="p">]</span>
 </pre></div>
 
+<p>Uploading/Downloading from/to a server</p>
+
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">sshed</span> <span class="kn">import</span> <span class="n">servers</span>
+<span class="n">server</span> <span class="o">=</span> <span class="n">servers</span><span class="o">.</span><span class="n">from_conf</span><span class="p">(</span><span class="s">'development'</span><span class="p">)</span>
+<span class="n">server</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="s">'/tmp/mytar.tar'</span><span class="p">,</span> <span class="s">'/var/tmp/mytar.tar'</span><span class="p">)</span>
+<span class="n">server</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s">'/var/logs/httpd/error_log'</span><span class="p">,</span> <span class="s">'/tmp/remote/error_log'</span><span class="p">)</span>
+</pre></div>
+
 <p>Creating a new server without a ssh config</p>
 
 <div class="highlight"><pre><span class="kn">from</span> <span class="nn">sshed.servers</span> <span class="kn">import</span> <span class="n">Server</span>
@@ -70,6 +78,19 @@ uses a host alias.</p>
         <span class="n">password</span><span class="o">=</span><span class="s">'supersecretpassword'</span><span class="p">)</span>
 
 <span class="n">server</span><span class="o">.</span><span class="n">run</span><span class="p">(</span> <span class="o">...</span> <span class="p">)</span>
+</pre></div>
+
+<p>Working with argparse. This sshed module also has a helper for working
+with argparse. You can import an action so that when a user puts in a
+<code>--server server.mycompany.com</code> it will create a new server instance
+for that server.</p>
+
+<p>Example:</p>
+
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">sshed.argparse_actions</span> <span class="kn">import</span> <span class="n">ServerAction</span>
+
+<span class="c"># some other argparse information</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">'-s'</span><span class="p">,</span> <span class="s">'--server'</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="n">ServerAction</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">'server'</span><span class="p">)</span>
 </pre></div>
       </section>
       <footer>
