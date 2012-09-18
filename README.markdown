@@ -1,7 +1,7 @@
 sshed
 ===================
 
-sshed is a minimal paramiko wrapper that makes working with ssh through python
+sshed is a minimal paramiko/ssh2 wrapper that makes working with ssh through python
 just like working with it in normal SSH. It will use your configuration that
 you have already created first then any extra options can be passed in through
 the library that is using it. Servers are base objects that can be extended
@@ -32,6 +32,14 @@ from sshed import servers
 server = servers.from_conf('myserver.com')
 server.run('hostname').output
 >> ['myserver.com']
+```
+
+Uploading/Downloading from/to a server
+```python
+from sshed import servers
+server = servers.from_conf('development')
+server.upload('/tmp/mytar.tar', '/var/tmp/mytar.tar')
+server.download('/var/logs/httpd/error_log', '/tmp/remote/error_log')
 ```
 
 Creating a new server without a ssh config
