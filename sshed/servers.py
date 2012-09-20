@@ -168,7 +168,7 @@ class Server(object):
         sftp.get(remote_path, local_file)
 
 
-def from_conf(server, config_file=path.expanduser('~/.ssh/config')):
+def from_conf(server, config_file=path.expanduser('~/.ssh/config'), server_cls=Server):
     """
         This will create a new server based of a users config file. It should
         set up various things like forward agent, default usernames, and
@@ -191,6 +191,9 @@ def from_conf(server, config_file=path.expanduser('~/.ssh/config')):
         if not 'hostname' in information:
             information['hostname'] = server
 
-    server = Server(**information)
+    if issubclass(server_cls, Server):
+        server = server_cls(**information)
+    else:
+        raise Exception('Instance not a subclass of Server')
 
     return server
