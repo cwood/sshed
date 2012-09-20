@@ -170,9 +170,10 @@ class Server(object):
 
 def from_conf(server, config_file=path.expanduser('~/.ssh/config'), server_cls=Server):
     """
-        This will create a new server based of a users config file. It should
-        set up various things like forward agent, default usernames, and
-        default settings for a server.
+        from_conf will create a new server instance based of a server_cls.
+        By default this will use the base Server instance to create new
+        sub servers. If you extend the ``Server`` class you can override
+        this methods server_cls to be the new instance of a Server.
 
         .. code-block:: python
 
