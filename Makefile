@@ -1,3 +1,3 @@
 
 test:
-	nosetests --with-coverage --cover-erase --cover-package=sshed --cover-html
+	nosetests -s --with-coverage --cover-erase --cover-package=sshed --cover-html
