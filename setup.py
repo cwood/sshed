@@ -1,6 +1,7 @@
 from setuptools import setup
 from sshed import version
 
+readme_file = open('README.markdown')
 setup(
     name='sshed',
     author='Colin Wood',
@@ -8,7 +9,7 @@ setup(
     install_requires=[
         'ssh>=1.7.14',
     ],
-    long_description=open('README.markdown').read(),
+    long_description=readme_file.read(),
     url='http://cwood.github.com/sshed/',
     version=version,
     packages=['sshed'],
