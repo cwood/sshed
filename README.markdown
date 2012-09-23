@@ -1,11 +1,11 @@
 sshed
 ===================
 
-sshed is a minimal paramiko/ssh2 wrapper that makes working with ssh through python
-just like working with it in normal SSH. It will use your configuration that
-you have already created first then any extra options can be passed in through
-the library that is using it. Servers are base objects that can be extended
-to do other tasks. Also the API is dead simple.
+sshed is a minimal paramiko/ssh2 wrapper that makes working with ssh through
+python just like working with it in normal SSH. It will use your configuration
+that you have already created first then any extra options can be passed in
+through the library that is using it. Servers are base objects that can be
+extended to do other tasks. Also the API is dead simple.
 
 
 Documentation / Repo Information:
