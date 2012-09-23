@@ -94,10 +94,10 @@ class Server(object):
             else:
                 self.cwd = path
 
-        if self.config.get('forwardagent', False):
-            agent = ssh.agent.Agent()
-
         channel = self.client.get_transport().open_session()
+
+        if self.config.get('forwardagent', False):
+            agent = ssh.agent.AgentRequestHandler(channel)
 
         if pty:
             channel.get_pty()
