@@ -17,6 +17,11 @@ class TestServer(unittest.TestCase):
     def test_sudo(self):
         self.assertTrue('root' in self.server.run('sudo whoami').output)
 
+    def test_passphrase(self):
+        self.assertEqual(self.server.run(
+            'git clone git@github.com:cwood/sshed', echo=True).returncode, 0)
+        self.server.run('rm -rf sshed')
+
     def test_path(self):
         self.server.run('mkdir ~/dotfiles')
         self.server.run('cd ~/dotfiles')
