@@ -22,6 +22,7 @@ class TestServer(unittest.TestCase):
         self.server.run('cd ~/dotfiles')
         self.assertEqual(self.server.run('pwd').output,
                          ['/home/' + user + '/dotfiles'])
+        self.server.run('rm -r ~/dotfiles')
 
 
 class TestServerFromConf(unittest.TestCase):
