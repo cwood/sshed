@@ -65,9 +65,10 @@ class Server(object):
             raise Exception("Either one command or not triple quoated")
 
         for command in string.splitlines():
-            output = self.run(command)
+            command = self.run(command, echo=echo)
             if echo:
-                print output
+                for line in command.output:
+                    print line
 
     def run(self, command, pty=True, echo=False):
         """
