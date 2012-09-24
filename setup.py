@@ -1,7 +1,10 @@
 from setuptools import setup
 from sshed import version
+import os
 
-readme_file = open('README.markdown')
+readme_file = open(os.path.abspath(
+    os.path.join(os.path.dirname(__file__),'README')))
+
 setup(
     name='sshed',
     author='Colin Wood',
@@ -12,6 +15,6 @@ setup(
     long_description=readme_file.read(),
     url='http://cwood.github.com/sshed/',
     version=version,
-    packages=['sshed'],
+    packages=['sshed', 'tests'],
     description='Minimal Parmaiko/ssh2 wrapper to make working with SSH easy.',
 )
