@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from sshed import version
 import os
 
@@ -15,6 +15,6 @@ setup(
     long_description=readme_file.read(),
     url='http://cwood.github.com/sshed/',
     version=version,
-    packages=['sshed', 'tests'],
+    packages=find_packages(),
     description='Minimal Parmaiko/ssh2 wrapper to make working with SSH easy.',
 )
