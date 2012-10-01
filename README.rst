@@ -46,6 +46,7 @@ Uploading/Downloading from/to a server::
 
 
 Creating a new server without a ssh config::
+
     from sshed.servers import Server
     server = Server(username='username', hostname='development.mycompany.com',
             password='supersecretpassword')
