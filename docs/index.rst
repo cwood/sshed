@@ -13,6 +13,7 @@ server, laptop, or anything else that supports OpenSSH2.
 .. toctree::
    :maxdepth: 2
 
+../README.rst
 
 .. automodule:: sshed.servers
     :members:
