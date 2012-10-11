@@ -35,22 +35,36 @@ class Server(object):
 
         self.config = kwargs
         self.cwd = '~'
+        self.prompt = 'Password for {hostname}:'
+
         client = ssh.SSHClient()
         client.set_missing_host_key_policy(ssh.AutoAddPolicy())
         client.load_system_host_keys()
 
+        timeout = kwargs.get('timeout', None)
+        compress = kwargs.get('compress', False)
+        port = kwargs.get('port', 22)
+
+
         try:
-            client.connect(self.hostname, username=self.username)
+            # Try to connect with a ssh key if we can.
+            client.connect(self.hostname,
+                           username=self.username,
+                           port=port,
+                           timeout=timeout,
+                           compress=compress)
         except ssh.SSHException:
-            try:
-                client.connect(self.hostname, username=self.username,
-                               password=self.password
-                               if self.password else getpass(),
-                              port=22
-                               if not kwargs.get('port') else kwargs.get(
-                                   'port'))
-            except:
-                raise Exception("User password is wrong or can not access")
+
+          if not self.password:
+              self.password = getpass(self.prompt.format(
+                  hostname=self.hostname))
+
+          client.connect(self.hostname,
+                         username=self.username,
+                         password=self.password,
+                         port=port,
+                         timeout=timeout,
+                         compress=compress)
 
         self.client = client
 
