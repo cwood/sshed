@@ -10,8 +10,8 @@ class CentOS(Server):
         else:
             return False, command
 
-    def install(server, package):
-        command = server.run('sudo yum install %s' % (package))
+    def yum(server, method, package):
+        command = server.run('sudo yum %s %s' % (method, package))
 
         if command.returncode is 0:
             return True, None
