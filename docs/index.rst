@@ -44,6 +44,18 @@ Creating a base server without the config.
     server.run('hostname', echo=True)
     >> development.mycompany.com
 
+
+Retrying a command that has failed.
+
+.. code-block:: python
+
+    from sshed import servers
+    server = servers.from_conf('development')
+    command = server.run('touch /etc/httpd/extra/myhost.conf')
+
+    if command.returncode not 0:
+        command.retry()
+
 .. toctree::
    :maxdepth: 2
 
