@@ -2,7 +2,9 @@ from os import path
 from .base import Server
 import ssh
 
-def from_conf(server, config_file=path.expanduser('~/.ssh/config'), server_cls=Server):
+
+def from_conf(server, config_file=path.expanduser('~/.ssh/config'),
+              server_cls=Server):
     """
         from_conf will create a new server instance based of a server_cls.
         By default this will use the base Server instance to create new
