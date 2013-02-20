@@ -19,4 +19,18 @@ setup(
         'nose',
     ],
     keywords=['ssh', 'automation', 'remote', 'ssh2', 'OpenSSH'],
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Information Technology',
+        'Intended Audience :: System Administrators',
+        'License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)',
+        'Operating System :: POSIX',
+        'Programming Language :: Python :: 2.5',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Topic :: System :: Networking',
+        'Topic :: System :: Systems Administration',
+    ]
 )

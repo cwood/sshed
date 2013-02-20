@@ -68,7 +68,7 @@ class Server(object):
 
         self.client = client
 
-    def commands(self, string, echo=False):
+    def commands(self, string, echo=False, raise_on_failure=True):
         """
             Use triple quoted strings to send in a mass of shell commands.
             This comes in handy if you need to run a small bash script but
@@ -80,6 +80,18 @@ class Server(object):
 
         for command in string.splitlines():
             command = self.run(command, echo=echo)
+
+            if command.returncode is not 0 and raise_on_failure:
+
+                raise command.CommandFailure(
+                    """Command '%s' failed to run.
+Got code %s.
+Messages: %s""" % (
+                    command.command_str,
+                    command.returncode,
+                    '\n'.join(command.output)
+                ))
+
             if echo:
                 for line in command.output:
                     print line
