@@ -18,18 +18,23 @@ def from_conf(server, config_file=path.expanduser('~/.ssh/config'),
             server.run("whoami")
             >> ["myusername"]
     """
+    def get_sshconfig(config_file):
+        if path.exists(config_file):
+            with open(config_file) as ssh_conf:
+                ssh_config.parse(ssh_conf)
+                information = dict(ssh_config.lookup(server))
+            return information
+        else:
+            return {}
+
     ssh_config = ssh.SSHConfig()
+    server_config = get_sshconfig(config_file)
 
-    with open(config_file) as ssh_conf:
-        ssh_config.parse(ssh_conf)
-
-        information = dict(ssh_config.lookup(server))
-
-        if not 'hostname' in information:
-            information['hostname'] = server
+    if not 'hostname' in server_config:
+        server_config['hostname'] = server
 
     if issubclass(server_cls, Server):
-        server = server_cls(**information)
+        server = server_cls(**server_config)
     else:
         raise Exception('Instance not a subclass of Server')
 
