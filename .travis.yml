@@ -11,4 +11,5 @@ notifcations:
      - cwood06@gmail.com
 before_script:
   # Allow us to SSH passwordless to localhost
+  - gem install vagrant
   - vagrant up
