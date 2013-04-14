@@ -1,9 +1,9 @@
 import unittest
 from sshed import servers
 
-user = 'travis'
-password = 'travis'
-host = 'localhost'
+user = 'vagrant'
+password = 'vagrant'
+host = '2.3.4.5'
 
 
 class TestServer(unittest.TestCase):
