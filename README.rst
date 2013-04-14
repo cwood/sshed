@@ -19,7 +19,7 @@ Examples
 Creating a server from your ~/.ssh/config with ssh keys created. This also
 uses a host alias
 
-.. code-block::python
+.. code-block:: python
 
     from sshed import servers
     server = servers.from_conf('development')
@@ -34,7 +34,7 @@ uses a host alias
 
 Creating a server from just a hostname
 
-.. code-block::python
+.. code-block:: python
 
     from sshed import servers
     server = servers.from_conf('myserver.com')
@@ -43,7 +43,7 @@ Creating a server from just a hostname
 
 Uploading/Downloading from/to a server
 
-.. code-block::python
+.. code-block:: python
 
     from sshed import servers
     server = servers.from_conf('development')
@@ -53,7 +53,7 @@ Uploading/Downloading from/to a server
 
 Creating a new server without a ssh config
 
-.. code-block::python
+.. code-block:: python
 
     from sshed.servers import Server
     server = Server(username='username', hostname='development.mycompany.com',
@@ -66,7 +66,7 @@ with argparse. You can import an action so that when a user puts in a
 ``--server server.mycompany.com`` it will create a new server instance
 for that server.
 
-Example::
+.. code-block:: python
 
     from sshed.argparse_actions import ServerAction
 
