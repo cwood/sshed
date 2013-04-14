@@ -11,6 +11,4 @@ notifcations:
      - cwood06@gmail.com
 before_script:
   # Allow us to SSH passwordless to localhost
-  - ssh-keygen -f ~/.ssh/id_rsa -N ""
-  - cp ~/.ssh/{id_rsa.pub,authorized_keys}
-  - "netstat -tan | grep LISTEN"
+  - vagrant up
