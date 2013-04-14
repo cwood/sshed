@@ -6,3 +6,6 @@ install:
  - "pip install . --use-mirrors"
  - "pip install -r requirements.pip"
 script: nosetests
+notifcations:
+  email:
+     - cwood06@gmail.com
