@@ -17,7 +17,9 @@ Documentation / Repo Information:
 Examples
 -------------------
 Creating a server from your ~/.ssh/config with ssh keys created. This also
-uses a host alias::
+uses a host alias
+
+.. code-block::python
 
     from sshed import servers
     server = servers.from_conf('development')
@@ -30,14 +32,18 @@ uses a host alias::
     server.run('pwd').output
     >> ['/var/www']
 
-Creating a server from just a hostname::
+Creating a server from just a hostname
+
+.. code-block::python
 
     from sshed import servers
     server = servers.from_conf('myserver.com')
     server.run('hostname').output
     >> ['myserver.com']
 
-Uploading/Downloading from/to a server::
+Uploading/Downloading from/to a server
+
+.. code-block::python
 
     from sshed import servers
     server = servers.from_conf('development')
@@ -45,7 +51,9 @@ Uploading/Downloading from/to a server::
     server.download('/var/logs/httpd/error_log', '/tmp/remote/error_log')
 
 
-Creating a new server without a ssh config::
+Creating a new server without a ssh config
+
+.. code-block::python
 
     from sshed.servers import Server
     server = Server(username='username', hostname='development.mycompany.com',
