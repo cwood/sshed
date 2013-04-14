@@ -4,5 +4,5 @@ Host *
    ForwardAgent yes
 
 Host development
-   HostName 2.3.4.5
+   HostName localhost
    User vagrant
