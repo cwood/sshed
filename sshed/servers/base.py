@@ -2,6 +2,7 @@ import ssh
 from sshed.commands import Command
 from getpass import getpass, getuser
 from os import path
+import errno
 
 
 class Server(object):
@@ -176,6 +177,21 @@ Messages: %s""" % (
             sftp.chdir(remote_path)
         except IOError:
             return False
+
+        return True
+
+    def file_exists(self, remote_path):
+        """
+            Check to see if a path exsits on the remote server
+        """
+        sftp = self.client.open_sftp()
+        try:
+            sftp.stat(remote_path)
+        except IOError as error:
+            if error.errno == errno.ENOENT:
+                return False
+            else:
+                raise error
 
         return True
 
