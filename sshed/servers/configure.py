@@ -1,6 +1,6 @@
 from os import path
 from .base import Server
-import ssh
+import paramiko as ssh
 
 
 def from_conf(server, config_file=path.expanduser('~/.ssh/config'),
@@ -15,14 +15,14 @@ def from_conf(server, config_file=path.expanduser('~/.ssh/config'),
 
             from sshed import servers
             server = servers.from_conf('development')
-            server.run("whoami")
+            server.run("whoami").output
             >> ["myusername"]
     """
     def get_sshconfig(config_file):
         if path.exists(config_file):
             with open(config_file) as ssh_conf:
                 ssh_config.parse(ssh_conf)
-                information = dict(ssh_config.lookup(server))
+                information = ssh_config.lookup(server)
             return information
         else:
             return {}
@@ -30,7 +30,7 @@ def from_conf(server, config_file=path.expanduser('~/.ssh/config'),
     ssh_config = ssh.SSHConfig()
     server_config = get_sshconfig(config_file)
 
-    if not 'hostname' in server_config:
+    if 'hostname' not in server_config:
         server_config['hostname'] = server
 
     if issubclass(server_cls, Server):

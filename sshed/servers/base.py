@@ -1,24 +1,24 @@
-import ssh
+import paramiko as ssh
 from sshed.commands import Command
 from getpass import getpass, getuser
-from os import path
+from paramiko.proxy import ProxyCommand
 import errno
 
 
 class Server(object):
     """
-        Server is a base class to call ssh commands on. It should used
-        like this. The server object should be the base of all environment
-        variables for a particular server. The beauty of this is that
-        this is self contained and can be used with other tools like
-        celery or gevent.
+    Server is a base class to call ssh commands on. It should used
+    like this. The server object should be the base of all environment
+    variables for a particular server. The beauty of this is that
+    this is self contained and can be used with other tools like
+    celery or gevent.
 
         .. code-block:: python
 
             from sshed.servers import Server
             development = Server('development.mycompany.com',
-                                 username='myusername',
-                                 password='mypassword')
+            username='myusername',
+            password='mypassword')
 
             development.run('git clone git@github.com:cwood/mysite.com.git')
             development.run('sudo apachectl restart')
@@ -45,7 +45,12 @@ class Server(object):
         timeout = kwargs.get('timeout', None)
         compress = kwargs.get('compress', False)
         port = kwargs.get('port', 22)
+        proxy_command = kwargs.get('proxycommand')
 
+        if proxy_command:
+            proxy = ProxyCommand(proxy_command)
+        else:
+            proxy = None
 
         try:
             # Try to connect with a ssh key if we can.
@@ -53,27 +58,27 @@ class Server(object):
                            username=self.username,
                            port=port,
                            timeout=timeout,
-                           compress=compress)
+                           compress=compress, sock=proxy)
         except ssh.SSHException:
 
-          if not self.password:
-              self.password = getpass(self.prompt.format(
-                  hostname=self.hostname))
+            if not self.password:
+                self.password = getpass(
+                    self.prompt.format(hostname=self.hostname))
 
-          client.connect(self.hostname,
-                         username=self.username,
-                         password=self.password,
-                         port=port,
-                         timeout=timeout,
-                         compress=compress)
+            client.connect(self.hostname,
+                           username=self.username,
+                           password=self.password,
+                           port=port,
+                           timeout=timeout,
+                           compress=compress, sock=proxy)
 
         self.client = client
 
     def commands(self, string, echo=False, raise_on_failure=True):
         """
-            Use triple quoted strings to send in a mass of shell commands.
-            This comes in handy if you need to run a small bash script but
-            don't want to do server.run(commanda ... b ... c) in mutiple lines.
+        Use triple quoted strings to send in a mass of shell commands.
+        This comes in handy if you need to run a small bash script but
+        don't want to do server.run(commanda ... b ... c) in mutiple lines.
         """
 
         if not '\n' in string:
@@ -86,12 +91,12 @@ class Server(object):
 
                 raise command.CommandFailure(
                     """Command '%s' failed to run.
-Got code %s.
-Messages: %s""" % (
-                    command.command_str,
-                    command.returncode,
-                    '\n'.join(command.output)
-                ))
+                    Got code %s.
+                    Messages: %s""" % (
+                        command.command_str,
+                        command.returncode,
+                        '\n'.join(command.output)
+                    ))
 
             if echo:
                 for line in command.output:
@@ -99,12 +104,12 @@ Messages: %s""" % (
 
     def run(self, command, pty=True, echo=False):
         """
-            run should not treat sudo commands any different then normal
-            user commands.
+        run should not treat sudo commands any different then normal
+        user commands.
 
             Need to exapnd this for failed sudo passwords and refreshing
             the channel.
-        """
+            """
 
         cmd_obj = Command(command, self)
 
@@ -170,7 +175,7 @@ Messages: %s""" % (
 
     def path_exists(self, remote_path):
         """
-            Check to see if a path exsits on the remote server
+        Check to see if a path exsits on the remote server
         """
         sftp = self.client.open_sftp()
         try:
@@ -182,7 +187,7 @@ Messages: %s""" % (
 
     def file_exists(self, remote_path):
         """
-            Check to see if a path exsits on the remote server
+        Check to see if a path exsits on the remote server
         """
         sftp = self.client.open_sftp()
         try:
@@ -197,14 +202,14 @@ Messages: %s""" % (
 
     def upload(self, local_file, remote_path):
         """
-            Upload a file to the remote server
+        Upload a file to the remote server
         """
         sftp = self.client.open_sftp()
         sftp.put(local_file, remote_path)
 
     def download(self, remote_path, local_file):
         """
-            Download a file from the remote server
+        Download a file from the remote server
         """
         sftp = self.client.open_sftp()
         sftp.get(remote_path, local_file)
