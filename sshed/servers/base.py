@@ -102,7 +102,7 @@ class Server(object):
                 for line in command.output:
                     print line
 
-    def run(self, command, pty=True, echo=False):
+    def run(self, command, pty=False, echo=False):
         """
         run should not treat sudo commands any different then normal
         user commands.
@@ -143,7 +143,7 @@ class Server(object):
         output = []
         while not channel.exit_status_ready():
             if channel.recv_ready():
-                received = channel.recv(1024).splitlines()
+                received = channel.recv(2048).splitlines()
                 output.extend(received)
 
                 if echo:
@@ -154,8 +154,8 @@ class Server(object):
                 if has_sudo:
                     channel.sendall(self.password + '\n')
 
-                has_passphrase = [line for line in received
-                                  if 'passphrase' in line]
+                has_passphrase = [
+                    line for line in received if 'passphrase' in line]
 
                 if has_passphrase:
                     if self.password is None:
@@ -164,9 +164,9 @@ class Server(object):
                     else:
                         channel.sendall(self.password + '\n')
 
-
         cmd_obj.output = [line for line in output if line]
         cmd_obj.returncode = channel.recv_exit_status()
+        channel.close()
 
         if self.config.get('forwardagent', False):
             agent.close()
