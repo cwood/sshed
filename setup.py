@@ -6,7 +6,7 @@ setup(
     author='Colin Wood',
     author_email='cwood06@gmail.com',
     install_requires=[
-        'ssh>=1.7.14',
+        'paramiko>=1.15',
     ],
     url='http://cwood.github.com/sshed/',
     download_url='http://github.com/cwood/sshed/tarball/master',
