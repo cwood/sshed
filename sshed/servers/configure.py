@@ -23,6 +23,8 @@ def from_conf(server, config_file=path.expanduser('~/.ssh/config'),
             with open(config_file) as ssh_conf:
                 ssh_config.parse(ssh_conf)
                 information = ssh_config.lookup(server)
+                if 'port' in information.keys():
+                    information['port'] = int(information['port'])
             return information
         else:
             return {}
